@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-preprocessing-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-preprocessing
+  template:
+    metadata:
+      labels:
+        app: data-preprocessing
+    spec:
+      containers:
+      - name: data-preprocessing
+        image: your-registry/data-preprocessing:latest
+        ports:
+        - containerPort: 80

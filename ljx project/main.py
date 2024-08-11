@@ -1,5 +1,5 @@
 # main.py
-from data_preprocessing import create_generators
+from data_augmentation import create_generators
 from model_training import create_cnn_model, create_vgg16_model, train_model
 from evaluation import plot_training_history
 

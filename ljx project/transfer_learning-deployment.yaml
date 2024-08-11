@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transfer-learning-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transfer-learning
+  template:
+    metadata:
+      labels:
+        app: transfer-learning
+    spec:
+      containers:
+      - name: transfer-learning
+        image: your-registry/transfer-learning:latest
+        ports:
+        - containerPort: 80

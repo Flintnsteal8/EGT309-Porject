@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: comparison-service
+spec:
+  selector:
+    app: comparison
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

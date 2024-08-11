@@ -8,25 +8,36 @@ from sklearn.metrics import confusion_matrix, classification_report
 cnn_model = tf.keras.models.load_model('cnn_model.h5')
 transfer_model = tf.keras.models.load_model('transfer_learning_model.h5')
 
-# Load preprocessed data
-X_test = pd.read_csv('X_test.csv').values.reshape(-1, 128, 128, 3)
-y_test = pd.read_csv('y_test.csv').values
+# Load the test data generator
+test_dir = 'dataset_transport/dataset_transport/test'
+test_datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255)
+
+test_generator = test_datagen.flow_from_directory(
+    test_dir,
+    target_size=(128, 128),
+    batch_size=256,
+    shuffle=False,
+    class_mode='categorical'
+)
 
 # Predict using CNN model
-cnn_predictions = cnn_model.predict(X_test)
+cnn_predictions = cnn_model.predict(test_generator)
 cnn_pred_labels = cnn_predictions.argmax(axis=1)
 
 # Predict using transfer learning model
-transfer_predictions = transfer_model.predict(X_test)
+transfer_predictions = transfer_model.predict(test_generator)
 transfer_pred_labels = transfer_predictions.argmax(axis=1)
 
+# Get true labels from the test generator
+true_labels = test_generator.classes
+
 # Confusion matrices
-cnn_cm = confusion_matrix(y_test, cnn_pred_labels)
-transfer_cm = confusion_matrix(y_test, transfer_pred_labels)
+cnn_cm = confusion_matrix(true_labels, cnn_pred_labels)
+transfer_cm = confusion_matrix(true_labels, transfer_pred_labels)
 
 # Classification reports
-cnn_cr = classification_report(y_test, cnn_pred_labels)
-transfer_cr = classification_report(y_test, transfer_pred_labels)
+cnn_cr = classification_report(true_labels, cnn_pred_labels, target_names=test_generator.class_indices.keys())
+transfer_cr = classification_report(true_labels, transfer_pred_labels, target_names=test_generator.class_indices.keys())
 
 print("CNN Model Classification Report:\n", cnn_cr)
 print("Transfer Learning Model Classification Report:\n", transfer_cr)

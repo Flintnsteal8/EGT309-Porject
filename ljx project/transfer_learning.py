@@ -6,7 +6,7 @@ from tensorflow.keras.layers import Dense, Dropout, Flatten
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # Load the data generators
-train_dir = 'path/to/train/images'
+train_dir = 'dataset_transport/dataset_transport/train'
 train_datagen = ImageDataGenerator(
     rescale=1./255,
     rotation_range=20,

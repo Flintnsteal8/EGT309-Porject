@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: model-inference-deployment
+  name: cnn-model-training-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: model-inference
+      app: cnn-model-training
   template:
     metadata:
       labels:
-        app: model-inference
+        app: cnn-model-training
     spec:
       containers:
-      - name: model-inference
-        image: your-registry/model-inference:latest
+      - name: cnn-model-training
+        image: your-registry/cnn-model-training:latest
         ports:
         - containerPort: 80

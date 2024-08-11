@@ -3,8 +3,8 @@ import os
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # Directories for train and test datasets
-train_dir = 'path/to/train/images'
-test_dir = 'path/to/test/images'
+train_dir = 'dataset_transport/dataset_transport/train'
+test_dir = 'dataset_transport/dataset_transport/test'
 
 # ImageDataGenerator for data augmentation and normalization
 train_datagen = ImageDataGenerator(

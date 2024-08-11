@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: data-preprocessing-deployment
+  name: comparison-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: data-preprocessing
+      app: comparison
   template:
     metadata:
       labels:
-        app: data-preprocessing
+        app: comparison
     spec:
       containers:
-      - name: data-preprocessing
-        image: your-registry/data-preprocessing:latest
+      - name: comparison
+        image: your-registry/comparison:latest
         ports:
         - containerPort: 80

@@ -1,19 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: model-training-deployment
+  name: data-augmentation-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: model-training
+      app: data-augmentation
   template:
     metadata:
       labels:
-        app: model-training
+        app: data-augmentation
     spec:
       containers:
-      - name: model-training
-        image: your-registry/model-training:latest
+      - name: data-augmentation
+        image: your-registry/data-augmentation:latest
         ports:
         - containerPort: 80
+

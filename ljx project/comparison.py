@@ -1,24 +1,18 @@
 # comparison.py
 import tensorflow as tf
-import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, classification_report
+
+# Import the test generator function from data_augmentation.py
+from data_augmentation import create_test_generator
 
 # Load models
 cnn_model = tf.keras.models.load_model('cnn_model.h5')
 transfer_model = tf.keras.models.load_model('transfer_learning_model.h5')
 
 # Load the test data generator
-test_dir = 'dataset_transport/dataset_transport/test'
-test_datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255)
-
-test_generator = test_datagen.flow_from_directory(
-    test_dir,
-    target_size=(128, 128),
-    batch_size=256,
-    shuffle=False,
-    class_mode='categorical'
-)
+test_dir = 'path/to/test/images'
+test_generator = create_test_generator(test_dir)
 
 # Predict using CNN model
 cnn_predictions = cnn_model.predict(test_generator)

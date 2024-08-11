@@ -3,36 +3,15 @@ import tensorflow as tf
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-# Load the data generators
+# Import the functions from data_augmentation.py
+from data_augmentation import create_train_generator, create_validation_generator
+
+# Directories for train and test datasets
 train_dir = 'dataset_transport/dataset_transport/train'
-train_datagen = ImageDataGenerator(
-    rescale=1./255,
-    rotation_range=20,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    horizontal_flip=True,
-    validation_split=0.2
-)
 
-train_generator = train_datagen.flow_from_directory(
-    train_dir,
-    target_size=(128, 128),
-    batch_size=256,
-    shuffle=True,
-    class_mode='categorical',
-    subset='training'
-)
-
-validation_generator = train_datagen.flow_from_directory(
-    train_dir,
-    target_size=(128, 128),
-    batch_size=256,
-    shuffle=True,
-    class_mode='categorical',
-    subset='validation'
-)
+train_generator = create_train_generator(train_dir)
+validation_generator = create_validation_generator(train_dir)
 
 # Load pre-trained VGG16 model + higher level layers
 base_model = VGG16(weights='imagenet', include_top=False, input_shape=(128, 128, 3))
@@ -47,7 +26,7 @@ model = Sequential([
     Flatten(),
     Dense(256, activation='relu'),
     Dropout(0.5),
-    Dense(4, activation='softmax')  # 4 output classes: airplane, trucks, ships, automobile
+    Dense(4, activation='softmax')  # Adjust output for the number of classes
 ])
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])

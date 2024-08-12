@@ -1,11 +1,10 @@
-# transfer_learning.py
 import tensorflow as tf
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten
 
 # Import the functions from data_augmentation.py
-from data_augmentation import create_train_generator, create_validation_generator
+from data_augmentation import create_train_generator, create_validation_generator, print_class_examples
 
 # Directories for train and test datasets
 train_dir = 'dataset_transport/dataset_transport/train'
@@ -14,7 +13,7 @@ train_generator = create_train_generator(train_dir)
 validation_generator = create_validation_generator(train_dir)
 
 # Load pre-trained VGG16 model + higher level layers
-base_model = VGG16(weights='imagenet', include_top=False, input_shape=(128, 128, 3))
+base_model = VGG16(weights='imagenet', include_top=False, input_shape=(32, 32, 3))
 
 # Freeze the base model
 for layer in base_model.layers:
@@ -43,3 +42,6 @@ model.save('transfer_learning_model.h5')
 
 # Print model summary
 model.summary()
+
+# Print class labels
+print_class_examples(train_generator)

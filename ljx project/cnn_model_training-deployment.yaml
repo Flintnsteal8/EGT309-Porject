@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: cnn_model_training
-        image: varoo0n/cnn_model_training:latest
+        image: aloysias/cnn_model_training:latest
         ports:
         - containerPort: 8080

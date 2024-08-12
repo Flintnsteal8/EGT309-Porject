@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: data-augmentation
-        image: your-registry/data-augmentation:latest
+        image: aloysias/data_augmentation:latest
         ports:
         - containerPort: 80
 

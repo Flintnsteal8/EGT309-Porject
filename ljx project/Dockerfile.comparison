@@ -11,11 +11,11 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the current directory contents into the container at /app
-COPY comparison.py .
-
 COPY cnn_model_training.py .
 
 COPY transfer_learning.py .
+
+COPY data_augmentation.py .
 
 # Copy the dataset into the container
 COPY dataset_transport /app/dataset_transport
@@ -23,6 +23,6 @@ COPY dataset_transport /app/dataset_transport
 
 # Make port 80 available to the world outside this container
 EXPOSE 80
-
+COPY comparison.py .
 # Run comparison.py when the container launches
 CMD ["python", "comparison.py"]

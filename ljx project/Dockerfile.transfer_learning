@@ -13,6 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the current directory contents into the container at /app
 COPY comparison.py .
 
+COPY cnn_model_training.py . 
+
 # Copy the dataset into the container
 COPY dataset_transport /app/dataset_transport
 

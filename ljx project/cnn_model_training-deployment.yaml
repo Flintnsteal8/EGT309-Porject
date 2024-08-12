@@ -1,19 +1,21 @@
+# cnn_model_training-deployment.yaml
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cnn-model-training-deployment
+  name: cnn_model_training_deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cnn-model-training
+      app: cnn_model_training
   template:
     metadata:
       labels:
-        app: cnn-model-training
+        app: cnn_model_training
     spec:
       containers:
-      - name: cnn-model-training
-        image: your-registry/cnn-model-training:latest
+      - name: cnn_model_training
+        image: varoo0n/cnn_model_training:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080

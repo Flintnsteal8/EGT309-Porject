@@ -1,21 +1,26 @@
-# cnn_model_training-deployment.yaml
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cnn_model_training_deployment
+  name: cnn-model-training-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cnn_model_training
+      app: cnn-model-training
   template:
     metadata:
       labels:
-        app: cnn_model_training
+        app: cnn-model-training
     spec:
       containers:
-      - name: cnn_model_training
+      - name: cnn-model-training
         image: aloysias/cnn_model_training:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: "/app/models"
+          name: models-storage
+      volumes:
+      - name: models-storage
+        persistentVolumeClaim:
+          claimName: models

@@ -1,0 +1,51 @@
+kind: PersistentVolume
+
+apiVersion: v1
+
+metadata:
+
+  name: models
+
+  labels:
+
+    type: local
+
+spec:
+
+  capacity:
+
+    storage: 10Gi
+
+  accessModes:
+
+    - ReadWriteOnce
+
+  hostPath:
+
+    path: "/data/models"
+
+---
+
+kind: PersistentVolumeClaim
+
+apiVersion: v1
+
+metadata:
+
+  name: models
+
+spec:
+
+  accessModes:
+
+    - ReadWriteOnce
+
+  storageClassName: ""
+
+  volumeName: models
+
+  resources:
+
+    requests:
+
+      storage: 10Gi

@@ -17,6 +17,8 @@ COPY transfer_learning.py .
 
 COPY data_augmentation.py .
 
+COPY --from=cnn_training_container /app/saved_models/cnn_model.h5 /app/saved_models/cnn_model.h5
+
 # Copy the dataset into the container
 COPY dataset_transport /app/dataset_transport
 

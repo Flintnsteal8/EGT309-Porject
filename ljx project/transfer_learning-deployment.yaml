@@ -17,3 +17,10 @@ spec:
         image: aloysias/transfer_learning:latest
         ports:
         - containerPort: 80
+        volumeMounts:
+        - mountPath: "/app/models"
+          name: models-storage
+      volumes:
+      - name: models-storage
+        persistentVolumeClaim:
+          claimName: models

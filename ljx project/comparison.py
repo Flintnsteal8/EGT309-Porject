@@ -70,4 +70,4 @@ cnn_cr = classification_report(true_labels, cnn_pred_labels, target_names=test_g
 transfer_cr = classification_report(true_labels, transfer_pred_labels, target_names=test_generator.class_indices.keys())
 
 print("CNN Model Classification Report:\n", cnn_cr)
-print("Transfer Learning Model Classification Report:\n", transfer_cr)
+print("Transfer Learning Model Classification Report:\n", transfer_cr)

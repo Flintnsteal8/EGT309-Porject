@@ -19,8 +19,8 @@ test_generator = create_test_generator(test_dir)
 class_labels = ['airplane', 'automobile', 'ship', 'truck']
 
 # Define image paths
-cnn_test_image_path = 'dataset_transport/dataset_transport/test/automobile/0499.png'
-transfer_test_image_path = 'dataset_transport/dataset_transport/test/automobile/0499.png'  # Use a different image if needed
+cnn_test_image_path = 'dataset_transport/dataset_transport/test/airplane/0499.png'
+transfer_test_image_path = 'dataset_transport/dataset_transport/test/airplane/0499.png'  # Use a different image if needed
 
 # Load and preprocess images for CNN model
 cnn_img = Image.open(cnn_test_image_path).resize((32, 32))
@@ -40,6 +40,14 @@ transfer_img_array = transfer_img_array[np.newaxis, ...]  # Add batch dimension
 transfer_result = transfer_model.predict(transfer_img_array)
 transfer_predicted_class = np.argmax(transfer_result[0], axis=-1)
 
+
+# # Predict using CNN model for classification report
+cnn_predictions = cnn_model.predict(test_generator)
+cnn_pred_labels = cnn_predictions.argmax(axis=1)
+
+# Predict using transfer learning model for classification report
+transfer_predictions = transfer_model.predict(test_generator)
+transfer_pred_labels = transfer_predictions.argmax(axis=1)
 # Plotting
 plt.figure(figsize=(20, 8))
 

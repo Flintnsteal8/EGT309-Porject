@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.applications import VGG16
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Flatten
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense, Dropout, Flatten, GlobalAveragePooling2D
 
 # Import the functions from data_augmentation.py
 from data_augmentation import create_train_generator, create_validation_generator, print_class_examples
@@ -20,13 +20,13 @@ for layer in base_model.layers:
     layer.trainable = False
 
 # Create new model on top
-model = Sequential([
-    base_model,
-    Flatten(),
-    Dense(256, activation='relu'),
-    Dropout(0.5),
-    Dense(4, activation='softmax')  # Adjust output for the number of classes
-])
+x=base_model.output
+x=GlobalAveragePooling2D()(x)
+x = Dropout(0.4)(x)
+x=Dense(256,activation='relu')(x)
+preds=Dense(4,activation='softmax')(x)
+
+model=Model(inputs=base_model.input, outputs=preds)
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 

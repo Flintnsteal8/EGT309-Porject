@@ -18,7 +18,7 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-        - mountPath: "/app/models"
+        - mountPath: /data/saved_models
           name: models-storage
       volumes:
       - name: models-storage

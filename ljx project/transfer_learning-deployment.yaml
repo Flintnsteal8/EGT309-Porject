@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: transfer-learning
-        image: aloysias/transfer_learning:latest
+        image: amynyp/transfer_learning:latest
         ports:
         - containerPort: 80
         volumeMounts:

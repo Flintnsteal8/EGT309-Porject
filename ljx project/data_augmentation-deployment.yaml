@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: data-augmentation
-        image: aloysias/data_augmentation:latest
+        image: edricneo/data_augmentation:latest
         ports:
         - containerPort: 80
         volumeMounts:

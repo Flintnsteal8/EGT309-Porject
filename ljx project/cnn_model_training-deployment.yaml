@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: cnn-model-training
-        image: aloysias/cnn_model_training:latest
+        image: varoo0n/cnn_model_training:latest
         ports:
         - containerPort: 80
         volumeMounts:

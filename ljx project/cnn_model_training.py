@@ -33,7 +33,7 @@ history = model.fit(
 )
 
 # Save the trained model
-model.save('saved_models/cnn_model.h5')
+model.save('/data/saved_models/cnn_model.h5')
 
 # Print model summary
 model.summary()

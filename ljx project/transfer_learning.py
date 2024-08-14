@@ -38,7 +38,7 @@ history = model.fit(
 )
 
 # Save the trained model
-model.save('/data/saved_models/transfer_learning_model.h5')
+model.save('/app/saved_models/transfer_learning_model.h5')
 
 # Print model summary
 model.summary()

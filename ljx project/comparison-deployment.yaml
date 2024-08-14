@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
       - name: comparison
-        image: aloysias/comparison.py:latest
+        image: edricneo/comparison:latest
         ports:
         - containerPort: 80
         volumeMounts:
-        - mountPath: /data/saved_models
+        - mountPath: /app/saved_models
           name: models-storage
       volumes:
       - name: models-storage

@@ -8,8 +8,8 @@ from data_augmentation import create_test_generator
 
 
 # Load models
-cnn_model = tf.keras.models.load_model('/data/saved_models/cnn_model.h5')
-transfer_model = tf.keras.models.load_model('/data/saved_models/transfer_learning_model.h5')
+cnn_model = tf.keras.models.load_model('/app/saved_models/cnn_model.h5')
+transfer_model = tf.keras.models.load_model('/app/saved_models/transfer_learning_model.h5')
 
 # Load the test data generator
 test_dir = 'dataset_transport/dataset_transport/test'

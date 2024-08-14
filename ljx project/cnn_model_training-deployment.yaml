@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
       - name: cnn-model-training
-        image: varoo0n/cnn_model_training:latest
+        image: edricneo/cnn_model_training:latest
         ports:
         - containerPort: 80
         volumeMounts:
-        - mountPath: /data/saved_models
+        - mountPath: /app/saved_models
           name: models-storage
       volumes:
       - name: models-storage

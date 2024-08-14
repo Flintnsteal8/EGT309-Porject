@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
       - name: transfer-learning
-        image: amynyp/transfer_learning:latest
+        image: edricneo/transfer_learning:latest
         ports:
         - containerPort: 80
         volumeMounts:
-        - mountPath: /data/saved_models
+        - mountPath: /app/saved_models
           name: models-storage
       volumes:
       - name: models-storage

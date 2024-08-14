@@ -17,11 +17,13 @@ COPY transfer_learning.py .
 
 COPY data_augmentation.py .
 
-COPY --from=cnn_training_container /app/saved_models/cnn_model.h5 /app/saved_models/cnn_model.h5
+# Copy the pre-trained model file directly (if available locally)
+COPY saved_models/cnn_model.h5 /app/saved_models/cnn_model.h5
+
+# COPY --from=cnn_training_container /app/saved_models/cnn_model.h5 /app/saved_models/cnn_model.h5
 
 # Copy the dataset into the container
 COPY dataset_transport /app/dataset_transport
-
 
 # Make port 80 available to the world outside this container
 EXPOSE 80

@@ -3,3 +3,5 @@ numpy
 matplotlib
 pandas
 scikit-learn
+Flask
+Pillow  # If you're using PIL for image processing

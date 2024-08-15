@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Comparison Results</title>
+</head>
+<body>
+    <h1>Model Predictions</h1>
+    {% for prediction in predictions %}
+        <h2>Class: {{ prediction.class }}</h2>
+        <img src="data:image/png;base64,{{ prediction.img_data }}" alt="Prediction Image">
+        <p>CNN Model Prediction: {{ prediction.cnn_prediction }}</p>
+        <p>Transfer Learning Model Prediction: {{ prediction.transfer_prediction }}</p>
+    {% endfor %}
+    <h2>CNN Model Classification Report:</h2>
+    <pre>{{ cnn_cr }}</pre>
+    <h2>Transfer Learning Model Classification Report:</h2>
+    <pre>{{ transfer_cr }}</pre>
+</body>
+</html>

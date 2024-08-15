@@ -1,73 +1,100 @@
+from flask import Flask, render_template_string, render_template
+import os
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import PIL.Image as Image
 import numpy as np
-from sklearn.metrics import confusion_matrix, classification_report
-# Import the test generator function from data_augmentation.py
+import io
+import base64
+from sklearn.metrics import classification_report
 from data_augmentation import create_test_generator
 
+app = Flask(__name__)
 
-# Load models
-cnn_model = tf.keras.models.load_model('/app/saved_models/cnn_model.h5')
-transfer_model = tf.keras.models.load_model('/app/saved_models/transfer_learning_model.h5')
+@app.route('/')
+def home():
+    # Directly call the compare_models function to render the comparison page
+    return compare_models()
 
-# Load the test data generator
-test_dir = 'dataset_transport/dataset_transport/test'
-test_generator = create_test_generator(test_dir)
+@app.route('/compare')
+def compare_models():
+    # Load models
+    cnn_model = tf.keras.models.load_model('/app/saved_models/cnn_model.h5')
+    transfer_model = tf.keras.models.load_model('/app/saved_models/transfer_learning_model.h5')
 
-# Define class labels
-class_labels = ['airplane', 'automobile', 'ship', 'truck']
+    # Load the test data generator
+    test_dir = 'dataset_transport/dataset_transport/test'
+    test_generator = create_test_generator(test_dir)
 
-# Define image paths
-cnn_test_image_path = 'dataset_transport/dataset_transport/test/airplane/0499.png'
-transfer_test_image_path = 'dataset_transport/dataset_transport/test/airplane/0499.png'  # Use a different image if needed
+    # Define class labels and corresponding image paths
+    class_labels = ['airplane', 'automobile', 'ship', 'truck']
+    image_paths = {
+        'airplane': 'dataset_transport/dataset_transport/test/airplane/0499.png',
+        'automobile': 'dataset_transport/dataset_transport/test/automobile/0017.png',
+        'ship': 'dataset_transport/dataset_transport/test/ship/0123.png',
+        'truck': 'dataset_transport/dataset_transport/test/truck/0023.png'
+    }
 
-# Load and preprocess images for CNN model
-cnn_img = Image.open(cnn_test_image_path).resize((32, 32))
-cnn_img_array = np.array(cnn_img) / 255.0
-cnn_img_array = cnn_img_array[np.newaxis, ...]  # Add batch dimension
+    predictions = []
 
-# Make prediction using CNN model
-cnn_result = cnn_model.predict(cnn_img_array)
-cnn_predicted_class = np.argmax(cnn_result[0], axis=-1)
+    for label in class_labels:
+        # Load and preprocess image for CNN model
+        img = Image.open(image_paths[label]).resize((32, 32))
+        img_array = np.array(img) / 255.0
+        img_array = img_array[np.newaxis, ...]
 
-# Load and preprocess images for Transfer Learning model
-transfer_img = Image.open(transfer_test_image_path).resize((32, 32))
-transfer_img_array = np.array(transfer_img) / 255.0
-transfer_img_array = transfer_img_array[np.newaxis, ...]  # Add batch dimension
+        # Make predictions using both models
+        cnn_result = cnn_model.predict(img_array)
+        transfer_result = transfer_model.predict(img_array)
 
-# Make prediction using Transfer Learning model
-transfer_result = transfer_model.predict(transfer_img_array)
-transfer_predicted_class = np.argmax(transfer_result[0], axis=-1)
+        cnn_predicted_class = np.argmax(cnn_result[0], axis=-1)
+        transfer_predicted_class = np.argmax(transfer_result[0], axis=-1)
 
+        # Save the plot to a buffer
+        img_buf = io.BytesIO()
+        plt.figure(figsize=(10, 4))
 
-# # Predict using CNN model for classification report
-cnn_predictions = cnn_model.predict(test_generator)
-cnn_pred_labels = cnn_predictions.argmax(axis=1)
+        plt.subplot(1, 2, 1)
+        plt.imshow(img)
+        plt.title(f"CNN Prediction: {class_labels[cnn_predicted_class]}")
 
-# Predict using transfer learning model for classification report
-transfer_predictions = transfer_model.predict(test_generator)
-transfer_pred_labels = transfer_predictions.argmax(axis=1)
-# Plotting
-plt.figure(figsize=(20, 8))
+        plt.subplot(1, 2, 2)
+        plt.imshow(img)
+        plt.title(f"Transfer Learning Prediction: {class_labels[transfer_predicted_class]}")
 
-plt.subplot(1, 2, 1)
-plt.imshow(cnn_img)
-plt.title(f"CNN Model Prediction: {class_labels[cnn_predicted_class]}")
+        plt.savefig(img_buf, format='png')
+        img_buf.seek(0)
+        img_data = base64.b64encode(img_buf.getvalue()).decode()
 
-plt.subplot(1, 2, 2)
-plt.imshow(transfer_img)
-plt.title(f"Transfer Learning Model Prediction: {class_labels[transfer_predicted_class]}")
+        # Store the predictions and corresponding images
+        predictions.append({
+            'class': label,
+            'img_data': img_data,
+            'cnn_prediction': class_labels[cnn_predicted_class],
+            'transfer_prediction': class_labels[transfer_predicted_class]
+        })
 
-plt.show()
+    # Get true labels from the test generator
+    true_labels = test_generator.classes
 
-# Get true labels from the test generator
-true_labels = test_generator.classes
+    # Classification reports
+    cnn_predictions = cnn_model.predict(test_generator)
+    cnn_pred_labels = cnn_predictions.argmax(axis=1)
+    transfer_predictions = transfer_model.predict(test_generator)
+    transfer_pred_labels = transfer_predictions.argmax(axis=1)
 
+    cnn_cr = classification_report(true_labels, cnn_pred_labels, target_names=test_generator.class_indices.keys())
+    transfer_cr = classification_report(true_labels, transfer_pred_labels, target_names=test_generator.class_indices.keys())
 
-# Classification reports
-cnn_cr = classification_report(true_labels, cnn_pred_labels, target_names=test_generator.class_indices.keys())
-transfer_cr = classification_report(true_labels, transfer_pred_labels, target_names=test_generator.class_indices.keys())
+    # Specify the full path to the comparison.html file
+    html_file_path = r'C:\Users\Edric\Downloads\EGT309-Project\ljx project\comparison.html'
 
-print("CNN Model Classification Report:\n", cnn_cr)
-print("Transfer Learning Model Classification Report:\n", transfer_cr)
+    # Read the HTML template directly from the file system
+    with open(html_file_path) as f:
+        html_template = f.read()
+
+    # Render the template with the predictions and classification report
+    return render_template_string(html_template, predictions=predictions, cnn_cr=cnn_cr, transfer_cr=transfer_cr)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)

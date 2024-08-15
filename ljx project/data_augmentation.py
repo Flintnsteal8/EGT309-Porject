@@ -25,7 +25,7 @@ def create_train_generator(train_dir, target_size=(32, 32), batch_size=256):
     
     return train_generator
 
-def create_validation_generator(train_dir, target_size=(32, 32), batch_size=256):
+def create_validation_generator(train_dir, target_size=(32, 32), batch_size=256):   
     train_datagen = ImageDataGenerator(
         rescale=1./255,
         rotation_range=20,

@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
       - name: comparison
-        image: edricneo/comparison:latest
+        image: aloysias/comparison:latest
         ports:
-        - containerPort: 80
+        - containerPort: 5000
         volumeMounts:
         - mountPath: /app/saved_models
           name: models-storage
